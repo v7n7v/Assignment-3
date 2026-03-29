@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  db:
+    build:
+      context: .
+      dockerfile: Dockerfile.db
+    # preload the AGE shared library so LOAD 'age' works in SQL
+    command: postgres -c shared_preload_libraries=age
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: maze_db
+    ports:
+      - "5432:5432"
+    volumes:
+      # auto-run schema on first startup
+      - ./schema.sql:/docker-entrypoint-initdb.d/01_schema.sql
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

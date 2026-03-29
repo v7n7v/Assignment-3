@@ -1,0 +1,14 @@
+# database
+psycopg2-binary>=2.9
+
+# ML models
+ultralytics>=8.0
+open-clip-torch>=2.24
+torch>=2.0
+Pillow>=10.0
+
+# math / data
+numpy>=1.24
+
+# messaging (only needed for live detector/ingest)
+# zenoh>=0.11

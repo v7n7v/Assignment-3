@@ -1,0 +1,24 @@
+FROM postgres:16
+
+# Build pgvector and Apache AGE from source
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        build-essential \
+        postgresql-server-dev-16 \
+        libreadline-dev \
+        bison \
+        flex \
+        git \
+        ca-certificates && \
+    # pgvector
+    cd /tmp && \
+    git clone --branch v0.8.0 https://github.com/pgvector/pgvector.git && \
+    cd pgvector && make && make install && \
+    # Apache AGE
+    cd /tmp && \
+    git clone --branch PG16/v1.5.0-rc0 https://github.com/apache/age.git && \
+    cd age && make && make install && \
+    # cleanup
+    cd / && rm -rf /tmp/pgvector /tmp/age && \
+    apt-get purge -y --auto-remove build-essential git bison flex && \
+    rm -rf /var/lib/apt/lists/*
